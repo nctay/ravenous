@@ -2,15 +2,28 @@ import React from 'react';
 import './App.css';
 import BusinessList from '../src/components/BusinessList/BusinessList';
 import SearchBar from '../src/components/SearchBar/SearchBar';
+import yelp from './util/Yelp.js'
 
 
 class App extends React.Component {
+       constructor(props) {
+           super(props);
+           this.state = {businesses: []} ;
+           this.searchYelp = this.searchYelp.bind(this);
+        }
+
+  searchYelp(term,location,sortBy){
+  yelp.searchYelp(term,location,sortBy).then(businesses => {
+    this.setState({businesses: businesses })
+  })
+  }
+
   render() {
     return ( <div classname="App">
     <h1>ravenous</h1> 
      
-     <SearchBar />
-     <BusinessList /> 
+     <SearchBar searchYelp={this.searchYelp}/>
+     <BusinessList businesses={this.state.businesses} /> 
      </div>
     );
 }
